@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>post-page</title>
+</head>
+<body>
+    <h1>DIY Platform</h1>
+    <a href="/posts/add">add post</a>
+        <form method="GET" action="/posts">
+            <input type="text" id="search" name="search" placeholder="search by title">
+            <input type="submit" value="search">
+        </form>
+        <table border="1">
+            <tr>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Total Vote</th>
+            <th>Actions</th>
+
+            </tr>
+            <% for(let i=0; i < data.length; i++ ){ %>
+            <% const element = data[i] %>
+            <tr>
+                <td><%= element.title %></td>
+                <td><%= element.difficulty %></td>
+                <td><%= element.totalVote %></td>
+                <td>
+                    <a href="/posts/<%= element.id %>">Read more</a>
+                    <a href="/posts/<%= element.id %>/edit">Edit</a>
+                    <a href="/posts/<%= element.id %>/delete">Delete</a>
+                </td>
+
+            </tr>
+            <% } %>
+
+             
+        </table>
+
+</body>
+</html>
