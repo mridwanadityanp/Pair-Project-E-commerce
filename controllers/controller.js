@@ -1,10 +1,12 @@
 const { log } = require('console')
-// const {  } = require('../models/index')
+const { Product,User,Pucrhase,Profile} = require('../models/index')
+const { Op,where } = require('sequelize');
+
 
 class Controller {
     static async homePage(req,res){
         try {
-
+            
             res.render('homePage')
         } catch (error) {
             console.log(error);
@@ -31,8 +33,20 @@ class Controller {
     }
     static async homeProduct(req,res){
         try {
+    //         const { search } = req.query;
+    //   let options = {
+    //     include: User, 
+    //     order: [['createdAt', 'DESC']]
+    //   };
 
-            res.render('homeProduct')
+    //   if (search) {
+    //     options.where = {
+    //       title: { [Op.iLike]: `%${search}%` } 
+    //     };
+    //   }
+
+      const dataProduct = await Product.findAll()
+            res.render('homeProduct', {dataProduct})
         } catch (error) {
             console.log(error);
             res.send(error)
