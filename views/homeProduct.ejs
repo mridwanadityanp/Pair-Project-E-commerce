@@ -142,22 +142,26 @@
     <% } %>
 
     <% dataProduct.forEach(el => { %>
-      <div class="col-lg-4 col-md-6">
-        <div class="card h-100 shadow-sm border-0 product-card">
+      <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card h-100 shadow-sm border-0">
 
-          <div class="img-wrapper">
-            <img
-              src="<%= el.imageURL || 'https://via.placeholder.com/400x300' %>"
-              class="card-img-top"
-              alt="<%= el.title %>"
-              style="height: 250px; object-fit: cover;"
-            >
-          </div>
+          <img
+            src="<%= el.imageURL || 'https://via.placeholder.com/400x300' %>"
+            class="card-img-top"
+            alt="<%= el.title %>"
+            style="height: 220px; object-fit: cover;"
+          >
 
-          <div class="card-body d-flex flex-column p-4">
-            <div class="d-flex justify-content-between align-items-start mb-2">
-              <h5 class="card-title fw-bold mb-0 text-truncate" style="max-width: 70%;"><%= el.title %></h5>
-              <span class="badge-stock">Stock: <%= el.stock %></span>
+          <div class="card-body d-flex flex-column">
+            <h5 class="card-title fw-bold mb-1"><%= el.title %></h5>
+            <p class="text-muted small mb-2">Store: <%= el.storeName %></p>
+
+            <div class="mb-3">
+              <span class="text-primary fw-bold fs-5">
+                Rp <%= el.price.toLocaleString('id-ID') %>
+              </span>
+              <br>
+              <small class="text-secondary">Stock: <%= el.stock %></small>
             </div>
             <p class="text-muted small mb-4">
               <i class="bi bi-shop"></i> Store: <%= el.marketName %>
@@ -179,13 +183,12 @@
               <% if (session.role === 'buyer') { %>
                 <a href="/purchase/<%= el.id %>/buy" class="btn btn-success mt-3">➕ Buy Product</a>
               <% } %>
-
-              <% if (session.role === 'admin') { %>
-                <form action="/products/<%= el.id %>/delete" method="POST">
-                  <button class="btn btn-outline-danger w-100 btn-custom">🗑 Hapus Produk</button>
-                </form>
-              <% } %>
-            </div>
+            <!-- ADMIN DELETE -->
+            <% if (session.role === 'admin') { %>
+              <form action="/products/<%= el.id %>/delete" method="POST" class="mt-auto">
+                <button class="btn btn-danger w-100">Delete</button>
+              </form>
+            <% } %>
 
           </div>
         </div>
