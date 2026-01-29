@@ -177,9 +177,11 @@
 
 
 
-            <!-- ADMIN EDIT -->
-             <% if (session.role === 'admin') { %>
-              <a href="/products/<%= el.id %>/edit" class="btn btn-success mt-3"> Edit Product</a>
+
+
+             
+              <% if (session.role === 'buyer') { %>
+                <a href="/purchase/<%= el.id %>/buy" class="btn btn-success mt-3">➕ Buy Product</a>
               <% } %>
             <!-- ADMIN DELETE -->
             <% if (session.role === 'admin') { %>

@@ -1,7 +1,7 @@
 const { log } = require('console')
 const {Product, Profile, Purchase, User } = require('../models/index')
-const bcrypt = require('bcryptjs');
-const { title } = require('process');
+const bcrypt = require('bcryptjs')
+const { Op,where} = require('sequelize');
 
 
 class Controller {
@@ -171,28 +171,24 @@ static async homeProduct(req, res) {
 static async submitPurchase(req, res) {
     try {
         const { productId } = req.params;
+        const { buyerName } = req.body; 
 
         const product = await Product.findByPk(productId);
-
-        if (product.stock <= 0) {
-            return res.send("Maaf, stok sudah habis!");
+        if (!product || product.stock <= 0) {
+            return res.render('outOfStock');
         }
         await product.decrement('stock', { by: 1 });
 
-        res.redirect(`successPurchase`);
+        res.render('successPurchase', {
+            buyerName: buyerName,   
+            productName: product.title 
+        });
+
     } catch (error) {
-        res.send(error);
+        console.error(error);
+        res.send("Terjadi kesalahan: " + error.message);
     }
 }
-    static async paymentNotif(req,res){
-        try {
-
-            res.render('paymentNotif')
-        } catch (error) {
-            console.log(error);
-            res.send(error)
-        }
-    }
     static async deleteProduct(req,res){ //delete product
         try {
             await Product.destroy({
