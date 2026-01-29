@@ -19,7 +19,21 @@ module.exports = (sequelize, DataTypes) => {
     title: DataTypes.STRING,
     storeName: DataTypes.STRING,
     price: DataTypes.INTEGER,
-    stock: DataTypes.INTEGER,
+    stock: {type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg:"stok is required",
+        },
+      notNull: {
+        args: true,
+        msg: 'stook is required'
+      },
+      min : 0
+      }
+    },
+    
     BuyerId: DataTypes.INTEGER,
     imageURL:DataTypes.STRING
   }, {
