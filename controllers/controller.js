@@ -2,7 +2,8 @@ const { log } = require('console')
 const {Product, Profile, Purchase, User } = require('../models/index')
 const bcrypt = require('bcryptjs');
 const { title } = require('process');
-
+const { Op } = require('sequelize')
+const formatMoney = require('../helpers/currency')
 
 class Controller {
     static async loginForm(req, res) {  //form login
@@ -86,51 +87,49 @@ class Controller {
             })
         }
 
- static async homePage(req,res){ //page awaall
-        try {
-
-            res.render('homePage')
-        } catch (error) {
-            console.log(error);
-            res.send(error)
+    static async homePage(req,res){ //page awaall
+            try {
+                res.render('homePage')
+            } catch (error) {
+                console.log(error);
+                res.send(error)
+            }
         }
-    }
     
 
-static async homeProduct(req, res) {
-    try {
-        const { search } = req.query;
-        
-        // 1. Definisikan options dasar
-        let options = {
-            // include: Purchase,
-            order: [['createdAt', 'DESC']]
-        };
-
-        // 2. Tambahkan logika filter jika ada search query
-        if (search) {
-            options.where = {
-                title: { 
-                    // Perbaikan: Gunakan backticks (`) dan tanda petik untuk query SQL
-                    [Op.iLike]: `%${search}%` 
-                }
+    static async homeProduct(req, res) {
+        try {
+            const { search } = req.query;
+            
+            // 1. Definisikan options dasar
+            let options = {
+                // include: Purchase,
+                order: [['createdAt', 'DESC']]
             };
+
+            // 2. Tambahkan logika filter jika ada search query
+            if (search) {
+                options.where = {
+                    title: { 
+                        // Perbaikan: Gunakan backticks (`) dan tanda petik untuk query SQL
+                        [Op.iLike]: `%${search}%` 
+                    }
+                };
+            }
+
+            // 3. Masukkan 'options' ke dalam findAll agar filter bekerja
+            const dataProduct = await Product.findAll(options);
+
+            // 4. Kirim dataProduct DAN session (supaya tombol di EJS tidak error)
+            res.render('homeProduct', { formatMoney, dataProduct, session: req.session });
+
+        } catch (error) {
+            console.log("Error at homeProduct:", error);
+            res.send(error);
         }
-
-        // 3. Masukkan 'options' ke dalam findAll agar filter bekerja
-        const dataProduct = await Product.findAll(options);
-
-        // 4. Kirim dataProduct DAN session (supaya tombol di EJS tidak error)
-        res.render('homeProduct', { dataProduct, session: req.session });
-
-    } catch (error) {
-        console.log("Error at homeProduct:", error);
-        res.send(error);
     }
-}
 
-    /////////////////////////////////
-    static async pageAddProduct(req,res){
+    static async pageAdd(req,res){
         try {
             res.render('pageAdd')
         } catch (error) {
@@ -156,34 +155,39 @@ static async homeProduct(req, res) {
     }
 
     static async buyProduct(req, res) {
-    try {
-        const { productId } = req.params;
-        const product = await Product.findByPk(productId);
-        
-        if (!product) return res.send("Produk tidak ditemukan");
-        
-        res.render('buyForm', { product, session: req.session });
-    } catch (error) {
-        res.send(error);
-    }
-}
-
-static async submitPurchase(req, res) {
-    try {
-        const { productId } = req.params;
-
-        const product = await Product.findByPk(productId);
-
-        if (product.stock <= 0) {
-            return res.send("Maaf, stok sudah habis!");
+            try {
+                const { productId } = req.params;
+                const product = await Product.findByPk(productId);
+                
+                if (!product) return res.send("Produk tidak ditemukan");
+                
+                res.render('buyForm', { product, session: req.session });
+        } catch (error) {
+            res.send(error);
         }
-        await product.decrement('stock', { by: 1 });
-
-        res.redirect(`successPurchase`);
-    } catch (error) {
-        res.send(error);
     }
-}
+
+    static async submitPurchase(req, res) {
+        try {
+            const { productId } = req.params;
+            const { buyerName } = req.body; 
+
+            const product = await Product.findByPk(productId);
+            if (!product || product.stock <= 0) {
+                return res.render('outOfStock');
+            }
+            await product.decrement('stock', { by: 1 });
+
+            res.render('successPurchase', {
+                buyerName: buyerName,   
+                productName: product.title 
+            });
+
+        } catch (error) {
+            console.error(error);
+            res.send("Terjadi kesalahan: " + error.message);
+        }
+    }
     static async paymentNotif(req,res){
         try {
 
@@ -206,7 +210,7 @@ static async submitPurchase(req, res) {
             res.send(error)
         }
     }
-    static async editPage(req,res){ //delete product
+    static async editPage(req,res){ //edit product
         try {
             let idProduct = req.params.id
             let product = await Product.findByPk(idProduct)
@@ -217,7 +221,7 @@ static async submitPurchase(req, res) {
             res.send(error)
         }
     }
-    static async submitEdit(req,res){ //delete product
+    static async submitEdit(req,res){ //submit edit
         try {
              await Product.update({
             title: req.body.title,
@@ -237,6 +241,15 @@ static async submitPurchase(req, res) {
             console.log(error);
             res.send(error)
         }
+    }
+    static logout(req, res) {
+        req.session.destroy((error) => {
+            if(error) {
+                res.send(error)
+            } else {
+                res.redirect('/')
+            }
+        })
     }
 }
 

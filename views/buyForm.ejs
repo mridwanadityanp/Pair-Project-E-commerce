@@ -77,7 +77,7 @@
           </div>
         </div>
 
-        <form action="/purchase/<%= product.id %>/buy" method="POST">
+        <form action="/products/<%= product.id %>/buy" method="post">
           <div class="mb-3">
             <label class="form-label fw-600">Nama Lengkap</label>
             <input type="text" name="buyerName" class="form-control" placeholder="Masukkan nama penerima..." required>
@@ -89,7 +89,7 @@
           </div>
 
           <div class="d-grid gap-2">
-            <button type="submit" class="btn btn-success btn-custom shadow-sm">
+            <button type="submit" value="submit" class="btn btn-success btn-custom shadow-sm">
               🤝 Konfirmasi & Bayar Sekarang
             </button>
             <a href="/products" class="btn btn-outline-secondary btn-custom">
