@@ -64,23 +64,17 @@ class Controller {
         if (!email || !password || !role) {
             return res.send('All fields are required')
         }
-
-        // create user (password di-hash oleh model hook)
         await User.create({
             email,
             password,
             role
         })
-
-        // redirect ke login setelah sukses
         res.redirect('/login')
-
         } catch (err) {
         console.log('REGISTER ERROR:', err)
         res.send(err)
         }
     }
-
         static logout(req, res) { //logout
             req.session.destroy(() => {
             res.redirect('loginPage')
@@ -252,5 +246,7 @@ class Controller {
         })
     }
 }
+
+"halo"
 
 module.exports = Controller
