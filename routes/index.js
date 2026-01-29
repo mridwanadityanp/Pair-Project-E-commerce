@@ -10,6 +10,8 @@ router.post('/login', Controller.login)
 router.get('/register', Controller.registerForm)
 router.post('/register', Controller.register)
 router.get('/logout', Controller.logout)
+router.get('/purchase/:productId/buy', Controller.buyProduct); // Menampilkan form
+router.post('/purchase/:productId/buy', Controller.submitPurchase); // Proses simpan & update stok
 
 router.get('/add', isLoggedIn, isAdmin, Controller.pageAddProduct)
 router.post('/add', isLoggedIn, isAdmin, Controller.submitAddProduct)
