@@ -4,6 +4,8 @@ const Controller = require('../controllers/controller.js')
 const { isLoggedIn, isAdmin, isBuyer } = require('../middlewares/middleware.js')
 
 
+router.get('/', Controller.homePage)
+router.get('/products', Controller.homeProduct)
 //per-login-an
 router.get('/login', Controller.loginForm)
 router.post('/login', Controller.login)
@@ -13,13 +15,13 @@ router.get('/logout', Controller.logout)
 router.get('/purchase/:productId/buy', Controller.buyProduct); // Menampilkan form
 router.post('/purchase/:productId/buy', Controller.submitPurchase); // Proses simpan & update stok
 
-router.get('/add', isLoggedIn, isAdmin, Controller.pageAddProduct)
-router.post('/add', isLoggedIn, isAdmin, Controller.submitAddProduct)
+router.get('/products/add', isAdmin, Controller.pageAdd)
+router.post('/products/add', isAdmin, Controller.submitAdd)
+router.get('/products/:id/edit', isAdmin, Controller.editPage)
+router.post('/products/:id/edit', isAdmin, Controller.submitEdit)
+router.post('/products/:id/delete', isAdmin, Controller.deleteProduct)
 
-router.get('/', Controller.homePage)
-router.get('/products', Controller.homeProduct)
 
-router.post('/:id/delete', isLoggedIn, isAdmin, Controller.deleteProduct)
 router.post('/:productId/buy', isLoggedIn, isBuyer, Controller.buyProduct)
 
 
