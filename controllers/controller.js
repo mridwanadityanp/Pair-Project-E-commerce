@@ -1,6 +1,7 @@
 const { log } = require('console')
 const {Product, Profile, Purchase, User } = require('../models/index')
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcryptjs');
+const { title } = require('process');
 
 
 class Controller {
@@ -115,19 +116,25 @@ class Controller {
             res.send(error)
         }
     }
-    static async pageAddProduct(req,res){
+    static async pageAdd(req,res){
         try {
-
-            res.render('pageAddProduct')
+            res.render('pageAdd')
         } catch (error) {
             console.log(error);
             res.send(error)
         }
     }
-    static async submitAddProduct(req,res){
+    static async submitAdd(req,res){
         try {
-
-            res.redirect('/product')
+            await Product.create({ 
+                title: req.body.title, //'name' itu mention dari 'name' di ejs
+                storeName: req.body.storeName,
+                price: req.body.price,
+                stock: req.body.stock,
+                imageURL: req.body.imageURL,
+                BuyerId: req.session.userId 
+            });
+            res.redirect('/products')
         } catch (error) {
             console.log(error);
             res.send(error)
@@ -153,8 +160,44 @@ class Controller {
     }
     static async deleteProduct(req,res){ //delete product
         try {
-
-            res.redirect('/products')
+            await Product.destroy({
+                where: {
+                    id: req.params.id,
+                },
+            })
+            res.redirect(`/products`)
+        } catch (error) {
+            console.log(error);
+            res.send(error)
+        }
+    }
+    static async editPage(req,res){ //delete product
+        try {
+            let idProduct = req.params.id
+            let product = await Product.findByPk(idProduct)
+                      
+            res.render('editPage', {idProduct, product} )
+        } catch (error) {
+            console.log(error);
+            res.send(error)
+        }
+    }
+    static async submitEdit(req,res){ //delete product
+        try {
+             await Product.update({
+            title: req.body.title,
+            storeName: req.body.storeName,
+            price: req.body.price,
+            stock: req.body.stock,
+            imageURL: req.body.imageURL
+        },
+        {
+            where: {
+            id: req.params.id
+            }
+        }
+        )
+        res.redirect(`/products`)
         } catch (error) {
             console.log(error);
             res.send(error)

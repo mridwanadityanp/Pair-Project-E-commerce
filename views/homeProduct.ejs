@@ -73,7 +73,7 @@
 
           <div class="card-body d-flex flex-column">
             <h5 class="card-title fw-bold mb-1"><%= el.title %></h5>
-            <p class="text-muted small mb-2">Store: <%= el.marketName %></p>
+            <p class="text-muted small mb-2">Store: <%= el.storeName %></p>
 
             <div class="mb-3">
               <span class="text-primary fw-bold fs-5">
@@ -90,10 +90,14 @@
               </form>
             <% } %>
 
+            <!-- ADMIN EDIT -->
+             <% if (session.role === 'admin') { %>
+              <a href="/products/<%= el.id %>/edit" class="btn btn-success mt-3"> Edit Product</a>
+              <% } %>
             <!-- ADMIN DELETE -->
             <% if (session.role === 'admin') { %>
               <form action="/products/<%= el.id %>/delete" method="POST" class="mt-auto">
-                <button class="btn btn-danger w-100">🗑 Delete</button>
+                <button class="btn btn-danger w-100">Delete</button>
               </form>
             <% } %>
 
