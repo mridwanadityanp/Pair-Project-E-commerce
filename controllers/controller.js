@@ -165,17 +165,27 @@ static async homeProduct(req, res) {
 static async submitPurchase(req, res) {
     try {
         const { productId } = req.params;
+        // AMBIL buyerName dari form yang diisi user
+        const { buyerName } = req.body; 
 
         const product = await Product.findByPk(productId);
 
-        if (product.stock <= 0) {
+        if (!product || product.stock <= 0) {
             return res.send("Maaf, stok sudah habis!");
         }
+
+        // Kurangi stok
         await product.decrement('stock', { by: 1 });
 
-        res.redirect(`successPurchase`);
+        // PERBAIKAN: Kirim data ke EJS agar variabel <%= buyerName %> tidak error
+        res.render('successPurchase', {
+            buyerName: buyerName,    // Menghilangkan error di baris 93
+            productName: product.title // Untuk menampilkan nama produk di kartu
+        });
+
     } catch (error) {
-        res.send(error);
+        console.error(error);
+        res.send("Terjadi kesalahan: " + error.message);
     }
 }
     static async paymentNotif(req,res){
