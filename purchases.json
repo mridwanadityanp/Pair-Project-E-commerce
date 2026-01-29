@@ -1,0 +1,16 @@
+[
+  {
+    "UserId": 1,
+    "ProductId": 1,
+    "quantity": 1,
+    "purchaseDate": "2025-01-20",
+    "totalPrice": 15000000
+  },
+  {
+    "UserId": 2,
+    "ProductId": 2,
+    "quantity": 2,
+    "purchaseDate": "2025-01-22",
+    "totalPrice": 1500000
+  }
+]

@@ -1,0 +1,19 @@
+[
+  {
+    "title": "Laptop Gaming",
+    "marketName": "Tokopedia",
+    "price": 15000000,
+    "stock": 5,
+    "BuyerId": 1,
+    "imageURL": "..."
+  },
+  {
+    "title": "Mechanical Keyboard",
+    "marketName": "Shopee",
+    "price": 750000,
+    "stock": 10,
+    "BuyerId": 2,
+    "imageURL":"..."
+
+  }
+]

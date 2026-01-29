@@ -1,156 +1,68 @@
-
-const Model = require('../models/model.js')
+const { log } = require('console')
+// const {  } = require('../models/index')
 
 class Controller {
-    static async landing(req, res){
+    static async homePage(req,res){
         try {
-            res.render('landing.ejs')
 
+            res.render('homePage')
         } catch (error) {
-            res.send(error)
-        }
-    }
-    static async authorPage(req, res){
-        try {
-            let data = await Model.authors()
-            let dataToView = {data}
-            res.render('authorpage.ejs', dataToView)
-
-        } catch (error) {
-            res.send(error)
-        }
-    }
-    static async postpage(req, res){
-        try {
-            let searchBar = req.query.search
-            let data = await Model.posts(searchBar)
-            let dataToView = {data}
-            res.render('postpage.ejs', dataToView)
-
-        } catch (error) {
-            res.send(error)
-        }
-    }
-     static async authorDetail(req, res){
-        try {
-            let data = await Model.authorsDetail()
-            let dataToView = {data}
-            res.render('authordetail.ejs', dataToView)
-
-        } catch (error) {
-            res.send(error)
-        }
-    }
-     static async readMore(req, res){
-        try {
-            let idPost = req.params.id
-            let data = await Model.readMore(idPost)
-            let dataToView = {data}
-            res.render('postdetail.ejs', dataToView)
-           
-        } catch (error) {
-            res.send(error)
-        }
-    }
-    static async deletePost(req, res){
-        try {
-            let idPost = req.params.id
-            await Model.deletePost(idPost)
-            res.redirect('/posts')
-
-        } catch (error) {
-            res.send(error)
-        }
-    }
-    static async voteButton(req, res){
-        try {
-            let idPost = req.params.id
-            await Model.voteButton(idPost)
-            res.redirect(`/posts/${idPost}`)
-
-        } catch (error) {
-            res.send(error)
-        }
-    }
-    static async addPage(req,res) {
-        try {
-            let errorsArray = [];
-            if(req.query.errorMessages) {
-                errorsArray = req.query.errorMessages.split(',')
-            }
-            let data = await Model.authors()
-            let dataToView = {data, errorsArray}
-            res.render('addpage.ejs', dataToView)
- 
-        } catch (error) {
-            res.send(error)
             console.log(error);
-            
-        }
-    }
-    static async submitPage(req,res) {
-        try {
-            let newPost = req.body
-            await Model.addPost(
-                newPost.title,
-                newPost.author,
-                newPost.difficulty,
-                newPost.estimatedTime,
-                newPost.imageUrl,
-                newPost.createdDate,
-                newPost.description
-            )
-            res.redirect(`/posts`)
- 
-        } catch (error) {
-            if(error.message === 'errorValidation') {
-                res.redirect(`/posts/add?errorMessages=${error.errorMessages.join(',')}`)
-            } else {
-                res.send(error)
-                console.log(error);
-            }
-        }
-    }
-    static async editPage(req,res) {
-        try {
-            let errorsArray = [];
-            if(req.query.errorMessages) {
-                errorsArray = req.query.errorMessages.split(',')
-            }
-            let idPost = req.params.id
-            let post = await Model.readMore(idPost)
-            let author = await Model.authors()
-            let dataToView = {author, post, errorsArray}
-            res.render('editpage.ejs', dataToView)
-
-        } catch (error) {
             res.send(error)
         }
     }
-    static async submitEdit(req,res) {
+    static async loginPage(req,res){
         try {
-            let idPost = req.params.id
-            let newPost = req.body
-            await Model.submitEdit(
-                idPost,
-                newPost.title,
-                newPost.author,
-                newPost.difficulty,
-                newPost.estimatedTime,
-                newPost.imageUrl,
-                newPost.createdDate,
-                newPost.description
-            )
-            res.redirect(`/posts`)
- 
+
+            res.render('loginPage')
         } catch (error) {
-            if(error.message === 'errorValidation') {
-                res.redirect(`/posts/${req.params.id}/edit?errorMessages=${error.errorMessages.join(',')}`)
-            } else {
-                res.send(error)
-                console.log(error);
-            }
-            
+            console.log(error);
+            res.send(error)
+        }
+    }
+    static async registerPage(req,res){
+        try {
+
+            res.render('registerPage')
+        } catch (error) {
+            console.log(error);
+            res.send(error)
+        }
+    }
+    static async homeProduct(req,res){
+        try {
+
+            res.render('homeProduct')
+        } catch (error) {
+            console.log(error);
+            res.send(error)
+        }
+    }
+    static async pageAddProduct(req,res){
+        try {
+
+            res.render('pageAddProduct')
+        } catch (error) {
+            console.log(error);
+            res.send(error)
+        }
+    }
+    static async submitAddProduct(req,res){
+        try {
+
+            res.redirect('/product')
+        } catch (error) {
+            console.log(error);
+            res.send(error)
+        }
+    }
+    static async paymentNotif(req,res){
+        try {
+
+            res.render('paymentNotif')
+        } catch (error) {
+            console.log(error);
+            res.send(error)
         }
     }
 }

@@ -1,0 +1,14 @@
+[
+  {
+    "firstName": "Rizki",
+    "lastName": "Azhari",
+    "address": "Jakarta",
+    "UserId": 1
+  },
+  {
+    "firstName": "Budi",
+    "lastName": "Santoso",
+    "address": "Bandung",
+    "UserId": 2
+  }
+]

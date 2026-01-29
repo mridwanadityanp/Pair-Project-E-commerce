@@ -1,10 +1,13 @@
 const express = require('express')
-const router = require('./routes/index.route')
 const app = express()
-const port = 3000
+const PORT = 4000
+const routes = require('./routes/index.js')
 
+app.set('view engine', 'ejs');
 app.use(express.urlencoded({ extended: true }))
-app.use(router)
-app.listen(port, function(){console.log(`website is running on port ${port}`);
+app.use(routes)
+
+app.listen(PORT, () => {
+    console.log('Server is running on localhost://4000')
 })
 
