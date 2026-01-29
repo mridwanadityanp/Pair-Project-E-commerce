@@ -63,30 +63,23 @@ class Controller {
         if (!email || !password || !role) {
             return res.send('All fields are required')
         }
-
-        // create user (password di-hash oleh model hook)
         await User.create({
             email,
             password,
             role
         })
-
-        // redirect ke login setelah sukses
         res.redirect('/login')
-
         } catch (err) {
         console.log('REGISTER ERROR:', err)
         res.send(err)
         }
     }
-
         static logout(req, res) { //logout
             req.session.destroy(() => {
             res.redirect('loginPage')
             })
         }
-
- static async homePage(req,res){ //page awaall
+    static async homePage(req,res){ //page awaall
         try {
 
             res.render('homePage')
@@ -95,41 +88,27 @@ class Controller {
             res.send(error)
         }
     }
-    
-
-static async homeProduct(req, res) {
+    static async homeProduct(req, res) {
     try {
         const { search } = req.query;
         
-        // 1. Definisikan options dasar
         let options = {
-            // include: Purchase,
             order: [['createdAt', 'DESC']]
         };
-
-        // 2. Tambahkan logika filter jika ada search query
         if (search) {
             options.where = {
                 title: { 
-                    // Perbaikan: Gunakan backticks (`) dan tanda petik untuk query SQL
                     [Op.iLike]: `%${search}%` 
                 }
             };
         }
-
-        // 3. Masukkan 'options' ke dalam findAll agar filter bekerja
         const dataProduct = await Product.findAll(options);
-
-        // 4. Kirim dataProduct DAN session (supaya tombol di EJS tidak error)
         res.render('homeProduct', { dataProduct, session: req.session });
-
     } catch (error) {
         console.log("Error at homeProduct:", error);
         res.send(error);
     }
 }
-
-    /////////////////////////////////
     static async pageAddProduct(req,res){
         try {
             res.render('pageAdd')
@@ -156,7 +135,7 @@ static async homeProduct(req, res) {
     }
 
     static async buyProduct(req, res) {
-    try {
+        try {
         const { productId } = req.params;
         const product = await Product.findByPk(productId);
         
@@ -168,8 +147,8 @@ static async homeProduct(req, res) {
     }
 }
 
-static async submitPurchase(req, res) {
-    try {
+    static async submitPurchase(req, res) {
+         try {
         const { productId } = req.params;
         const { buyerName } = req.body; 
 
@@ -189,7 +168,7 @@ static async submitPurchase(req, res) {
         res.send("Terjadi kesalahan: " + error.message);
     }
 }
-    static async deleteProduct(req,res){ //delete product
+    static async deleteProduct(req,res){ 
         try {
             await Product.destroy({
                 where: {
@@ -235,5 +214,7 @@ static async submitPurchase(req, res) {
         }
     }
 }
+
+"halo"
 
 module.exports = Controller

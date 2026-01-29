@@ -25,18 +25,4 @@ router.post('/products/:id/delete', isAdmin, Controller.deleteProduct)
 router.post('/:productId/buy', isLoggedIn, isBuyer, Controller.buyProduct)
 
 
-// router.get('/product/add', Controller.pageAddProduct)
-// router.post('/product/add', Controller.submitAddProduct)
-// router.get('/notification', Controller.paymentNotif)
-
-// router.get('/products/:id/edit')
-// router.get('/purchase/:productId')
-
-
-// hanya admin boleh add product
-
-// hanya admin boleh delete
-
-
-
 module.exports = router
