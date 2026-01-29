@@ -1,7 +1,7 @@
 const { log } = require('console')
 const {Product, Profile, Purchase, User } = require('../models/index')
 const bcrypt = require('bcryptjs')
-const { Op } = require('sequelize');
+const { Op,where} = require('sequelize');
 
 
 class Controller {
@@ -165,22 +165,17 @@ static async homeProduct(req, res) {
 static async submitPurchase(req, res) {
     try {
         const { productId } = req.params;
-        // AMBIL buyerName dari form yang diisi user
         const { buyerName } = req.body; 
 
         const product = await Product.findByPk(productId);
-
         if (!product || product.stock <= 0) {
-            return res.send("Maaf, stok sudah habis!");
+            return res.render('outOfStock');
         }
-
-        // Kurangi stok
         await product.decrement('stock', { by: 1 });
 
-        // PERBAIKAN: Kirim data ke EJS agar variabel <%= buyerName %> tidak error
         res.render('successPurchase', {
-            buyerName: buyerName,    // Menghilangkan error di baris 93
-            productName: product.title // Untuk menampilkan nama produk di kartu
+            buyerName: buyerName,   
+            productName: product.title 
         });
 
     } catch (error) {
@@ -188,15 +183,6 @@ static async submitPurchase(req, res) {
         res.send("Terjadi kesalahan: " + error.message);
     }
 }
-    static async paymentNotif(req,res){
-        try {
-
-            res.render('paymentNotif')
-        } catch (error) {
-            console.log(error);
-            res.send(error)
-        }
-    }
     static async deleteProduct(req,res){ //delete product
         try {
 
