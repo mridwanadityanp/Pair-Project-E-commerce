@@ -95,28 +95,42 @@ class Controller {
             res.send(error)
         }
     }
-    static async homeProduct(req,res){ //home produkk
-        try {
-    //         const { search } = req.query;
-    //   let options = {
-    //     include: User, 
-    //     order: [['createdAt', 'DESC']]
-    //   };
+    
 
-    //   if (search) {
-    //     options.where = {
-    //       title: { [Op.iLike]: %${search}% } 
-    //     };
-    //   }
+static async homeProduct(req, res) {
+    try {
+        const { search } = req.query;
+        
+        // 1. Definisikan options dasar
+        let options = {
+            // include: Purchase,
+            order: [['createdAt', 'DESC']]
+        };
 
-    const dataProduct = await Product.findAll()
-            res.render('homeProduct', {dataProduct})
-        } catch (error) {
-            console.log(error);
-            res.send(error)
+        // 2. Tambahkan logika filter jika ada search query
+        if (search) {
+            options.where = {
+                title: { 
+                    // Perbaikan: Gunakan backticks (`) dan tanda petik untuk query SQL
+                    [Op.iLike]: `%${search}%` 
+                }
+            };
         }
+
+        // 3. Masukkan 'options' ke dalam findAll agar filter bekerja
+        const dataProduct = await Product.findAll(options);
+
+        // 4. Kirim dataProduct DAN session (supaya tombol di EJS tidak error)
+        res.render('homeProduct', { dataProduct, session: req.session });
+
+    } catch (error) {
+        console.log("Error at homeProduct:", error);
+        res.send(error);
     }
-    static async pageAdd(req,res){
+}
+
+    /////////////////////////////////
+    static async pageAddProduct(req,res){
         try {
             res.render('pageAdd')
         } catch (error) {
@@ -140,15 +154,36 @@ class Controller {
             res.send(error)
         }
     }
-    static async buyProduct(req,res){
-        try {
 
-            res.render('/:productId/buy')
-        } catch (error) {
-            console.log(error);
-            res.send(error)
-        }
+    static async buyProduct(req, res) {
+    try {
+        const { productId } = req.params;
+        const product = await Product.findByPk(productId);
+        
+        if (!product) return res.send("Produk tidak ditemukan");
+        
+        res.render('buyForm', { product, session: req.session });
+    } catch (error) {
+        res.send(error);
     }
+}
+
+static async submitPurchase(req, res) {
+    try {
+        const { productId } = req.params;
+
+        const product = await Product.findByPk(productId);
+
+        if (product.stock <= 0) {
+            return res.send("Maaf, stok sudah habis!");
+        }
+        await product.decrement('stock', { by: 1 });
+
+        res.redirect(`successPurchase`);
+    } catch (error) {
+        res.send(error);
+    }
+}
     static async paymentNotif(req,res){
         try {
 

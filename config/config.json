@@ -1,7 +1,7 @@
 {
   "development": {
     "username": "postgres",
-    "password": "ridwancoding",
+    "password": "postgres",
     "database": "PAIR-PROJECT",
     "host": "localhost",
     "dialect": "postgres"
