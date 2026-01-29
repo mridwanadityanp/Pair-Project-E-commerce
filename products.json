@@ -1,7 +1,7 @@
 [
   {
     "title": "Laptop Gaming",
-    "marketName": "Tokopedia",
+    "storeName": "Tokopedia",
     "price": 15000000,
     "stock": 5,
     "BuyerId": 1,
@@ -9,7 +9,7 @@
   },
   {
     "title": "Mechanical Keyboard",
-    "marketName": "Shopee",
+    "storeName": "Shopee",
     "price": 750000,
     "stock": 10,
     "BuyerId": 2,

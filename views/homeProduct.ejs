@@ -2,106 +2,115 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Products</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MyStore - Products</title>
 
-  <!-- Bootstrap 5 -->
-  <link
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
-    rel="stylesheet"
-  >
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
+<body class="bg-light">
 
-<!-- NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
   <div class="container">
-    <a class="navbar-brand" href="/products">MyStore</a>
+    <a class="navbar-brand fw-bold" href="/">RAWWR REPTIL</a>
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="nav">
-      <ul class="navbar-nav ms-auto">
+      <ul class="navbar-nav ms-auto align-items-center">
 
-        
+        <li class="me-3">
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Search"/>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </li>
+
+        <% if (!session.userId) { %>
+          <li class="nav-item">
+            <a href="/login" class="btn btn-outline-light btn-sm">Login</a>
+          </li>
+        <% } else { %>
+          <li class="nav-item text-white me-2">
+            <small>Role: <%= session.role %></small>
+          </li>
+          <li class="nav-item">
+            <a href="/logout" class="btn btn-danger btn-sm">Logout</a>
+          </li>
+        <% } %>
 
       </ul>
     </div>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="bg-light py-5 text-center">
+<section class="bg-white py-5 text-center border-bottom">
   <div class="container">
-    <h1 class="fw-bold">Our Products</h1>
-    <p class="text-muted">Find the best product for you</p>
+    <h1 class="fw-bold text-dark">LET'S BUY RAAWWRTILL</h1>
+    <p class="text-muted lead">Find the best REPTIL for you</p>
+
+    <% if (session.role === 'admin') { %>
+      <a href="/products/add" class="btn btn-success mt-3">➕ Add Product</a>
+    <% } %>
+
   </div>
 </section>
 
-<!-- PRODUCT LIST -->
 <div class="container my-5">
   <div class="row">
 
-    <% products.forEach(product => { %>
-      <div class="col-md-4 mb-4">
-        <div class="card h-100 shadow-sm">
+    <% dataProduct.forEach(el => { %>
+      <div class="col-md-4 col-sm-6 mb-4">
+        <div class="card h-100 shadow-sm border-0">
 
           <img
-            src="<%= product.imageUrl || 'https://via.placeholder.com/400x300' %>"
+            src="<%= el.imageURL || 'https://via.placeholder.com/400x300' %>"
             class="card-img-top"
-            style="height: 200px; object-fit: cover;"
+            alt="<%= el.title %>"
+            style="height: 220px; object-fit: cover;"
           >
 
           <div class="card-body d-flex flex-column">
-            <h5 class="card-title"><%= product.name %></h5>
-            <p class="card-text text-muted small">
-              <%= product.description %>
-            </p>
+            <h5 class="card-title fw-bold mb-1"><%= el.title %></h5>
+            <p class="text-muted small mb-2">Store: <%= el.marketName %></p>
 
-            <p class="fw-bold mt-auto">
-              Rp <%= product.price.toLocaleString('id-ID') %>
-            </p>
+            <div class="mb-3">
+              <span class="text-primary fw-bold fs-5">
+                Rp <%= el.price.toLocaleString('id-ID') %>
+              </span>
+              <br>
+              <small class="text-secondary">Stock: <%= el.stock %></small>
+            </div>
 
-            <!-- ACTION BUTTON -->
-            <% if (!session.userId) { %>
-              <a href="/login" class="btn btn-outline-primary w-100">
-                Login to Buy
-              </a>
+            <!-- BUY BUTTON (BUYER ONLY) -->
+            <% if (session.role === 'buyer') { %>
+              <form action="/purchase/<%= el.id %>/buy" method="POST" class="mt-auto">
+                <button class="btn btn-primary w-100">🛒 Buy</button>
+              </form>
+            <% } %>
 
-            <% } else if (session.role === 'user') { %>
-              <a href="/purchase/<%= product.id %>" class="btn btn-primary w-100">
-                Buy
-              </a>
-
-            <% } else if (session.role === 'admin') { %>
-              <div class="d-flex gap-2">
-                <a href="/products/<%= product.id %>/edit" class="btn btn-warning w-50">
-                  Edit
-                </a>
-                <a href="/products/<%= product.id %>/delete"
-                   class="btn btn-danger w-50"
-                   onclick="return confirm('Delete this product?')">
-                  Delete
-                </a>
-              </div>
+            <!-- ADMIN DELETE -->
+            <% if (session.role === 'admin') { %>
+              <form action="/products/<%= el.id %>/delete" method="POST" class="mt-auto">
+                <button class="btn btn-danger w-100">🗑 Delete</button>
+              </form>
             <% } %>
 
           </div>
         </div>
       </div>
-    <% }) %>
+    <% }); %>
 
   </div>
 </div>
 
-<!-- FOOTER -->
-<footer class="bg-dark text-light py-3 text-center">
-  <small>&copy; 2026 MyStore</small>
+<footer class="bg-dark text-white py-4 text-center">
+  <div class="container">
+    <small>&copy; 2026 RAWWR REPTIL. All rights reserved.</small>
+  </div>
 </footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
 </body>
 </html>
