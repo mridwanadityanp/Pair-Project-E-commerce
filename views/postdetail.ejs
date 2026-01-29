@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>post-detail</title>
+</head>
+<body>
+    <h1>DIY Platform</h1>
+       <h2><%= data.title %></h2>
+        <img src="<%= data.imageUrl %>">
+        <ul>
+            <li> Estimated Time : <%= data.estimatedTime %></li>
+            <li> Difficulty : <%= data.difficulty %></li>
+            <li> Author : <%= data.authorName %></li>
+            <li> Created Date : <%= data.formatCreatedDate %></li>
+            <li> Total Vote : <%= data.totalVote%></li>
+        </ul>
+        <a href="/posts/<%= data.id %>/vote">vote</a>
+        <p style="white-space: pre-line;"> <%= data.description %> </p>
+
+</body>
+</html>

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>post-page</title>
+</head>
+<body>
+    <h1>DIY Platform</h1>
+        <% if (errorsArray.length > 0){ %>
+            <ul><% for(let i = 0; i < errorsArray.length; i++){ %>
+                    <li><%=errorsArray[i]%></li>
+           <% } %>
+             </ul>
+        <%}%>
+        <form method="POST" action="/posts/add">
+            <label for="title">title</label>
+            <input type="text" id="title" name="title"> <br><br>
+
+            <label for="author" >Author</label>
+            <select id="author" name="author">
+                <option value="">Please Select</option>
+                    <% for(let i=0; i < data.length; i++ ){ %>
+                    <% const element = data[i] %>
+                    <option value= "<%=element.id%>"> <%=element.fullName%> </option>
+                    <%}%>
+            </select>
+
+            <label for="difficulty">difficulty</label>
+            <select id="difficulty" name="difficulty">
+                <option value="">Please Select</option>
+                <option value="Easy">Easy</option>
+                <option value="Medium">Medium</option>
+                <option value="Hard">Hard</option>
+            </select> <br><br>
+
+            <label for="estimatedTime" >Estimated Time</label>
+            <input type="number" id="estimatedTime" name="estimatedTime"> <br><br>
+
+            <label for="imageUrl" >Image URL</label>
+            <input type="text" id="imageUrl" name="imageUrl"> <br><br>
+
+            <label for="createdDate" >Created Date</label>
+            <input type="date" id="createdDate" name="createdDate"> <br><br>
+
+            <p><label for="description">Description</label></p>
+            <textarea id="description" name="description" rows="4" cols="50"></textarea>
+            <br>
+            <input type="submit" value="Submit">       
+
+        </form>
+        
+</body>
+</html>

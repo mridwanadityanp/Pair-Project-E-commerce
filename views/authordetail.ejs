@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>author-detail</title>
+</head>
+<body>
+    <h1>DIY Platform</h1>
+    <a href="/authors">back to author</a>
+        <table border="1">
+            <tr>
+            <th>ID</th>
+            <th>Author</th>
+            <th>Total Post</th>
+            <th>Total Vote</th>
+            <th>Average Estimated Time</th>
+            </tr>
+            <% for(let i=0; i < data.length; i++ ){ %>
+            <% const element = data[i] %>
+            <tr>
+                <td><%= element.id %></td>
+                <td><%= element.formatName %></td>
+                <td style="color: <%= (element.totalPost <= 0) ? 'red' : '' %> ;"><%= element.totalPost %></td>
+                <td style="color: <%= (element.totalVote <= 0) ? 'red' : '' %> ;"><%= element.totalVote %></td>
+                <td style="color: <%= (element.averageTime <= 0) ? 'red' : '' %> ;"><%= element.averageTime %></td>
+            </tr>
+            <% } %>
+
+             
+        </table>
+
+</body>
+</html>

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>author-page</title>
+</head>
+<body>
+    <h1>DIY Platform</h1>
+    <a href="/authors/detail">show detail</a>
+        <table border="1">
+            <tr>
+            <th>ID</th>
+            <th>Author</th>
+            </tr>
+            <% for(let i=0; i < data.length; i++ ){ %>
+            <% const element = data[i] %>
+            <tr>
+                <td><%= element.id %></td>
+                <td><%= element.formatName %></td>
+            </tr>
+            <% } %>
+
+             
+        </table>
+
+</body>
+</html>
