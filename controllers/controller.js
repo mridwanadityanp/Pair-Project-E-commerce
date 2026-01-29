@@ -1,6 +1,7 @@
 const { log } = require('console')
 const { Product,User,Pucrhase,Profile} = require('../models/index')
 const { Op,where } = require('sequelize');
+const { Session } = require('inspector');
 
 
 class Controller {
@@ -33,43 +34,54 @@ class Controller {
     }
     static async homeProduct(req,res){
         try {
-    //         const { search } = req.query;
-    //   let options = {
-    //     include: User, 
-    //     order: [['createdAt', 'DESC']]
-    //   };
-
-    //   if (search) {
-    //     options.where = {
-    //       title: { [Op.iLike]: `%${search}%` } 
-    //     };
-    //   }
+    
 
       const dataProduct = await Product.findAll()
-            res.render('homeProduct', {dataProduct})
+            res.render('homeProduct', {dataProduct, session:req.session})
         } catch (error) {
             console.log(error);
             res.send(error)
         }
     }
-    static async pageAddProduct(req,res){
-        try {
+    // Menampilkan Form Tambah (Hanya Admin)
+  static addForm(req, res) {
+    if (req.session.role !== 'admin') {
+      return res.redirect('/product?error=Hanya admin yang boleh tambah produk');
+    }
+    res.render('addProduct');
+  }
 
-            res.render('pageAddProduct')
-        } catch (error) {
-            console.log(error);
-            res.send(error)
-        }
+  // Proses Simpan Produk (Hanya Admin)
+  static async createProduct(req, res) {
+    try {
+      const { title, imageURL, price, stock, marketName } = req.body;
+      await Product.create({ title, imageURL, price, stock, marketName });
+      res.redirect('/product');
+    } catch (err) {
+      res.send(err.message);
     }
-    static async submitAddProduct(req,res){
-        try {
+  }
 
-            res.redirect('/product')
-        } catch (error) {
-            console.log(error);
-            res.send(error)
-        }
+  // Proses Beli (Hanya User - Mengurangi Stok)
+  static async buyProduct(req, res) {
+    try {
+      const { id } = req.params;
+      if (req.session.role !== 'user') {
+        return res.redirect('/product?error=Admin tidak boleh membeli');
+      }
+      
+      const product = await Product.findByPk(id);
+      if (product.stock > 0) {
+        await product.decrement('stock', { by: 1 }); // Stok berkurang 1
+        res.redirect('/product?success=Berhasil membeli ' + product.title);
+      } else {
+        res.redirect('/product?error=Stok habis');
+      }
+    } catch (err) {
+      res.send(err.message);
     }
+  }
+
     static async paymentNotif(req,res){
         try {
 

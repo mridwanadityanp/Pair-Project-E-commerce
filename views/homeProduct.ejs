@@ -3,17 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>MyStore - Products</title>
-
+  <title>RAWWR REPTIL - Products</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    .product-card {
+      transition: transform 0.2s;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+    }
+  </style>
 </head>
 <body class="bg-light">
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow-sm">
-
-  
-
-
   <div class="container">
     <a class="navbar-brand fw-bold" href="/">RAWWR REPTIL</a>
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#nav">
@@ -21,11 +24,12 @@
     </button>
     <div class="collapse navbar-collapse" id="nav">
       <ul class="navbar-nav ms-auto">
-        <li><form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form></li>
-        
+        <li>
+          <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" placeholder="Cari reptil..." aria-label="Search"/>
+            <button class="btn btn-outline-success" type="submit">Search</button>
+          </form>
+        </li>
       </ul>
     </div>
   </div>
@@ -34,7 +38,7 @@
 <section class="bg-white py-5 text-center border-bottom">
   <div class="container">
     <h1 class="fw-bold text-dark">LET'S BUY RAAWWRTILL</h1>
-    <p class="text-muted lead">Find the best REPTIL for you</p>
+    <p class="text-muted lead">Temukan koleksi reptil terbaik untukmu</p>
   </div>
 </section>
 
@@ -43,7 +47,7 @@
 
     <% dataProduct.forEach(el => { %>
       <div class="col-md-4 col-sm-6 mb-4">
-        <div class="card h-100 shadow-sm border-0">
+        <div class="card h-100 shadow-sm border-0 product-card">
           
           <img
             src="<%= el.imageURL || 'https://via.placeholder.com/400x300' %>"
@@ -57,11 +61,16 @@
             <p class="text-muted small mb-2">Store: <%= el.marketName %></p>
             
             <div class="mb-3">
-              <span class="text-primary fw-bold fs-5">
+              <span class="text-success fw-bold fs-5">
                 Rp <%= el.price.toLocaleString('id-ID') %>
               </span>
               <br>
               <small class="text-secondary">Stock: <%= el.stock %></small>
+            </div>
+
+            <div class="mt-auto d-flex gap-2">
+              <a href="/buy/<%= el.id %>" class="btn btn-success flex-fill rounded-pill">Buy</a>
+             
             </div>
 
           </div>
@@ -74,7 +83,7 @@
 
 <footer class="bg-dark text-white py-4 text-center">
   <div class="container">
-    <small>&copy; 2026 MyStore. All rights reserved.</small>
+    <small>&copy; 2026 RAWWR REPTIL. All rights reserved.</small>
   </div>
 </footer>
 
