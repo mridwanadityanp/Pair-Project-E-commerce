@@ -20,7 +20,16 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Product.init({
-    title: DataTypes.STRING,
+    title: { type : DataTypes.STRING,
+  get() {
+    const capital = this.getDataValue('title')
+      if (capital) {
+          return capital.toUpperCase()
+      } else {
+          return null
+      }
+    }
+  }, 
     storeName: DataTypes.STRING,
     price: DataTypes.INTEGER,
     stock: {type: DataTypes.INTEGER,
