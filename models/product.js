@@ -13,6 +13,10 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Product.hasMany(models.Purchase, {
         foreignKey: 'productId'})
+      Product.belongsToMany(models.User, {
+        through: models.Purchase,
+        foreignKey: 'ProductId',
+        otherKey: 'UserId'})
     }
   }
   Product.init({
