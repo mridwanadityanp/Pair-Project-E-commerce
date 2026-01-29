@@ -1,8 +1,30 @@
 {
+  "name": "pair-project-e-commerce",
+  "version": "1.0.0",
+  "description": "LESTTTGOOO",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mridwanadityanp/Pair-Project-E-commerce.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/mridwanadityanp/Pair-Project-E-commerce/issues"
+  },
+  "homepage": "https://github.com/mridwanadityanp/Pair-Project-E-commerce#readme",
   "dependencies": {
     "ejs": "^4.0.1",
     "express": "^5.2.1",
+    "pg": "^8.17.2",
+    "sequelize": "^6.37.7"
+  },
+  "devDependencies": {
     "nodemon": "^3.1.11",
-    "pg": "^8.17.2"
+    "sequelize-cli": "^6.6.5"
   }
 }
